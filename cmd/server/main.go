@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"errors"
+	"io"
 	"log"
 	"net"
 
@@ -32,6 +34,30 @@ func main() {
 	if err := srv.Serve(lis); err != nil {
 		log.Fatalf("error: can't serve - %s", err)
 	}
+}
+
+func (r *Rides) Location(stream pb.Rides_LocationServer) error {
+	count := int64(0)
+	driverID := ""
+
+	for {
+		req, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		if err != nil {
+			return status.Errorf(codes.Internal, "can't read")
+		}
+		// TODO: Update DB
+		driverID = req.DriverId
+		count++
+	}
+
+	resp := pb.LocationResponse{
+		DriverId: driverID,
+		Count:    count,
+	}
+	return stream.SendAndClose(&resp)
 }
 
 func (r *Rides) End(ctx context.Context, req *pb.EndRequest) (*pb.EndResponse, error) {

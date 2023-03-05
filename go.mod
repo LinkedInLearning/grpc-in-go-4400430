@@ -1,4 +1,4 @@
-module github.com/353solutions/backoffice
+module github.com/353solutions/rides
 
 go 1.20
 

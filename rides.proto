@@ -23,3 +23,11 @@ message StartRequest {
   google.protobuf.Timestamp time = 5;
   RideType type = 6;
 }
+
+message StartResponse {
+  string id = 1;
+}
+
+service Rides {
+  rpc Start(StartRequest) returns (StartResponse) {}
+}

@@ -31,16 +31,6 @@ func main() {
 	}
 }
 
-func (r *Rides) End(ctx context.Context, req *pb.EndRequest) (*pb.EndResponse, error) {
-	// TODO: Validate req
-	resp := pb.EndResponse{
-		Id: req.Id,
-	}
-
-	// TODO: Work (insert to database ...)
-	return &resp, nil
-}
-
 func (r *Rides) Start(ctx context.Context, req *pb.StartRequest) (*pb.StartResponse, error) {
 	// TODO: Validate req
 	resp := pb.StartResponse{

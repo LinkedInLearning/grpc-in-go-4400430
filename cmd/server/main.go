@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 
 	"github.com/353solutions/rides/pb"
 )
@@ -22,6 +23,7 @@ func main() {
 	srv := grpc.NewServer()
 	var u Rides
 	pb.RegisterRidesServer(srv, &u)
+	reflection.Register(srv)
 
 	log.Printf("info: server ready on %s", addr)
 	if err := srv.Serve(lis); err != nil {

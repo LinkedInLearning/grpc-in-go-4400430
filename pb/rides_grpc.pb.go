@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type RidesClient interface {
 	Start(ctx context.Context, in *StartRequest, opts ...grpc.CallOption) (*StartResponse, error)
 	End(ctx context.Context, in *EndRequest, opts ...grpc.CallOption) (*EndResponse, error)
+	Location(ctx context.Context, opts ...grpc.CallOption) (Rides_LocationClient, error)
 }
 
 type ridesClient struct {
@@ -52,12 +53,47 @@ func (c *ridesClient) End(ctx context.Context, in *EndRequest, opts ...grpc.Call
 	return out, nil
 }
 
+func (c *ridesClient) Location(ctx context.Context, opts ...grpc.CallOption) (Rides_LocationClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Rides_ServiceDesc.Streams[0], "/Rides/Location", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &ridesLocationClient{stream}
+	return x, nil
+}
+
+type Rides_LocationClient interface {
+	Send(*LocationRequest) error
+	CloseAndRecv() (*LocationResponse, error)
+	grpc.ClientStream
+}
+
+type ridesLocationClient struct {
+	grpc.ClientStream
+}
+
+func (x *ridesLocationClient) Send(m *LocationRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *ridesLocationClient) CloseAndRecv() (*LocationResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(LocationResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // RidesServer is the server API for Rides service.
 // All implementations must embed UnimplementedRidesServer
 // for forward compatibility
 type RidesServer interface {
 	Start(context.Context, *StartRequest) (*StartResponse, error)
 	End(context.Context, *EndRequest) (*EndResponse, error)
+	Location(Rides_LocationServer) error
 	mustEmbedUnimplementedRidesServer()
 }
 
@@ -70,6 +106,9 @@ func (UnimplementedRidesServer) Start(context.Context, *StartRequest) (*StartRes
 }
 func (UnimplementedRidesServer) End(context.Context, *EndRequest) (*EndResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method End not implemented")
+}
+func (UnimplementedRidesServer) Location(Rides_LocationServer) error {
+	return status.Errorf(codes.Unimplemented, "method Location not implemented")
 }
 func (UnimplementedRidesServer) mustEmbedUnimplementedRidesServer() {}
 
@@ -120,6 +159,32 @@ func _Rides_End_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Rides_Location_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(RidesServer).Location(&ridesLocationServer{stream})
+}
+
+type Rides_LocationServer interface {
+	SendAndClose(*LocationResponse) error
+	Recv() (*LocationRequest, error)
+	grpc.ServerStream
+}
+
+type ridesLocationServer struct {
+	grpc.ServerStream
+}
+
+func (x *ridesLocationServer) SendAndClose(m *LocationResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *ridesLocationServer) Recv() (*LocationRequest, error) {
+	m := new(LocationRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // Rides_ServiceDesc is the grpc.ServiceDesc for Rides service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -136,6 +201,12 @@ var Rides_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Rides_End_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Location",
+			Handler:       _Rides_Location_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "rides.proto",
 }

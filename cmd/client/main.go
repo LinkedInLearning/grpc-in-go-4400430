@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/353solutions/rides/pb"
 	"google.golang.org/grpc"
@@ -13,9 +15,13 @@ func main() {
 	addr := "localhost:9292"
 	creds := insecure.NewCredentials()
 
-	conn, err := grpc.Dial(
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	conn, err := grpc.DialContext(
+		ctx,
 		addr,
 		grpc.WithTransportCredentials(creds),
+		grpc.WithBlock(),
 	)
 	if err != nil {
 		log.Fatalf("error: %s", err)

@@ -34,7 +34,18 @@ message EndRequest {
 
 message EndResponse { string id = 1; }
 
+message LocationRequest {
+  string driver_id = 1;
+  Location location = 2;
+}
+
+message LocationResponse {
+  string driver_id = 1;
+  int64 count = 2;
+}
+
 service Rides {
   rpc Start(StartRequest) returns (StartResponse) {}
   rpc End(EndRequest) returns (EndResponse) {}
+  rpc Location(stream LocationRequest) returns (LocationResponse) {}
 }

@@ -26,15 +26,19 @@ func main() {
 		log.Fatalf("error: can't listen - %s", err)
 	}
 
-	srv := grpc.NewServer(grpc.UnaryInterceptor(timingInterceptor))
-	var u Rides
-	pb.RegisterRidesServer(srv, &u)
-	reflection.Register(srv)
-
+	srv := createServer()
 	log.Printf("info: server ready on %s", addr)
 	if err := srv.Serve(lis); err != nil {
 		log.Fatalf("error: can't serve - %s", err)
 	}
+}
+
+func createServer() *grpc.Server {
+	srv := grpc.NewServer(grpc.UnaryInterceptor(timingInterceptor))
+	var u Rides
+	pb.RegisterRidesServer(srv, &u)
+	reflection.Register(srv)
+	return srv
 }
 
 func timingInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {

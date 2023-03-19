@@ -12,8 +12,14 @@ RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
 	curl \
-	netcat \
-	protobuf-compiler
+	netcat
+
+# protoc (installing with apt has issues with imports)
+WORKDIR /protobuf
+RUN curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v22.2/protoc-22.2-linux-x86_64.zip
+RUN unzip protoc-22.2-linux-x86_64.zip
+RUN rm protoc-22.2-linux-x86_64.zip
+RUN ln -s /protobuf/bin/protoc /usr/local/bin
 
 # grpcurl
 RUN curl -LO https://github.com/fullstorydev/grpcurl/releases/download/v1.8.7/grpcurl_1.8.7_linux_x86_64.tar.gz
@@ -31,6 +37,10 @@ RUN go install github.com/haya14busa/goplay/cmd/goplay@v1.0.0
 RUN go install github.com/go-delve/delve/cmd/dlv@latest
 RUN go install honnef.co/go/tools/cmd/staticcheck@latest
 RUN go install golang.org/x/tools/gopls@latest
+
+# protobuf & gRPC for Go
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1

@@ -10,7 +10,7 @@ message Location {
 }
 
 enum RideType {
-  USET = 0;
+  UNSET = 0;
   REGULAR = 1;
   POOL = 2;
 }

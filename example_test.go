@@ -33,6 +33,6 @@ func ExampleInvoice() {
 	}
 
 	// Output:
-	// id:"2023-0123"  time:{seconds:1673099100}  customer:"Wile E. Coyote"  items:{sku:"hammer-20"  amount:1  price:249}  items:{sku:"nail-9"  amount:100  price:1}  items:{sku:"glue-5"  amount:1  price:799}
+	// id:"2023-0123" time:{seconds:1673099100} customer:"Wile E. Coyote" items:{sku:"hammer-20" amount:1 price:249} items:{sku:"nail-9" amount:100 price:1} items:{sku:"glue-5" amount:1 price:799}
 	// size: 82
 }

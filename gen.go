@@ -1,4 +1,4 @@
-package rides
+package backoffice
 
 /* Get the Go gRPC tools by running
 
@@ -13,4 +13,4 @@ See more at https://grpc.io/docs/languages/go/quickstart/
 */
 
 //go:generate mkdir -p pb
-//go:generate protoc --go_out=pb --go_opt=paths=source_relative ./rides.proto
+//go:generate protoc --go_out=pb --go_opt=paths=source_relative ./invoice.proto

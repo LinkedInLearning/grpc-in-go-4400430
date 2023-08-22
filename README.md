@@ -5,6 +5,8 @@ This is the repository for the LinkedIn Learning course gRPC in Go. The full cou
 
 A growing number of companies use gRPC, a popular framework that writes services and clients. In this course, Miki Tebeka presents an overview of gRPC, then shows you the protocol buffers serialization format, as well as how to write a gPRC definition file (.proto), write gRPC servers and clients, and use advanced gRPC features like streaming, reflection, and more. Learn about RPC in general, then go into protocol buffers, how gRPC use them, why gRPC chose HTTP/2, and how the gRPC ecosystem works. Explore writing and compiling a .proto file, using generated code, and generating JSON encoding. Dive into gRPC servers and clients, and discover how to define a streaming endpoint, send streaming data to the client, and handle streaming responses from the server. Plus, go over advanced topics like writing interceptors, sharing .proto definitions, testing your code, and using the gRPC gateway.
 
+
+
 ## Instructions
 This repository has branches for each of the videos in the course. You can use the branch pop up menu in github to switch to a specific branch and take a look at the course at that stage, or you can add `/tree/BRANCH_NAME` to the URL to go to the branch you want to access.
 
@@ -43,5 +45,5 @@ Miki Tebeka
 Check out my other courses on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/miki-tebeka).
 
 [lil-course-url]: https://www.linkedin.com/learning/grpc-in-go?dApp=59033956&leis=LAA
-[lil-thumbnail-url]: https://media.licdn.com/dms/image/D560DAQHvWPMe2aZ7Cg/learning-public-crop_288_512/0/1687392757042?e=2147483647&v=beta&t=cVh41jmWdhz2UbV9eACiQVTidae6NydH3qtj0Bz1S5U
+[lil-thumbnail-url]: https://media.licdn.com/dms/image/D560DAQENGbFJUcfkbg/learning-public-crop_288_512/0/1689793845488?e=2147483647&v=beta&t=kmn30g1oiW0MERiaon5lO1OJ9VKlajiVlyBRwTFSkwE
 

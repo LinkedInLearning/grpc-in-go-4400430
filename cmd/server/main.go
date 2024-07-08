@@ -37,7 +37,7 @@ func main() {
 func (r *Rides) Start(ctx context.Context, req *pb.StartRequest) (*pb.StartResponse, error) {
 	md, _ := metadata.FromIncomingContext(ctx)
 	
-	if md.Get("apikey") == nil {
+	if md.Get("api_key") == nil {
 		return nil, status.Errorf(codes.Unauthenticated, "no metadata")
 	}
 	log.Printf("info: api_key %s", md["api_key"])
